@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Course Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container header-inner">
+            <h1 class="brand">CorFinder</h1>
+            <nav>
+                <input id="search" type="search" placeholder="Search courses, e.g. Python" aria-label="Search courses">
+                <button id="cart-btn" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+            </nav>
+        </div>
+    </header>
+
+    <div id="app">
+        <main class="container">
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Learn new skills. Buy courses from top instructors.</h2>
+                    <p>Browse curated courses, add them to your cart, and checkout securely.</p>
+                </div>
+            </section>
+
+            <section class="filters">
+                <select v-model="filters.category">
+                    <option value="all">All categories</option>
+                    <option value="programming">Programming</option>
+                    <option value="data">Data Science</option>
+                    <option value="design">Design</option>
+                    <option value="business">Business</option>
+                </select>
+
+                <!-- inline filter search (keeps filters together) -->
+                <input id="filters-search" class="filter-search" type="search" v-model="filters.query"
+                    placeholder="Search courses" aria-label="Filter search">
+
+                <select v-model="filters.sort">
+                    <option value="popular">Most popular</option>
+                    <option value="newest">Newest</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                </select>
+            </section>
+
+            <section class="courses-grid" aria-live="polite">
+                <article class="course-card" v-for="course in filteredCourses" :key="course.id">
+                    <div class="course-media">{{ course.title.split(' ')[0] }}</div>
+                    <div class="course-body">
+                        <div class="course-title">{{ course.title }}</div>
+                        <div class="course-meta">{{ course.instructor }} • {{ course.location }} • ⭐ {{ course.rating }}
+                        </div>
+                        <div class="course-spaces">Spaces: <strong>{{ course.spaces }}</strong></div>
+                        <div class="course-actions">
+                            <div class="price">${{ course.price.toFixed(2) }}</div>
+                            <div>
+                                <button class="add-btn" @click="addToCart(course)" :disabled="course.spaces <= 0">Add to
+                                    cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <aside class="cart" :class="{open: cartOpen}" :aria-hidden="!cartOpen">
+                <h3>Your Cart</h3>
+                <div id="cart-items">
+                    <div class="cart-item" v-for="(entry, id) in cartEntries" :key="id">
+                        <div>
+                            <div style="font-weight:600">{{ entry.course.title }}</div>
+                            <div style="font-size:.9rem;color:#6b7280">{{ entry.course.instructor }}</div>
+                        </div>
+                        <div style="text-align:right">
+                            <div>${{ entry.course.price.toFixed(2) }}</div>
+                            <div style="font-size:.9rem;margin-top:6px">
+                                <button @click="changeQty(entry.course.id, -1)">-</button>
+                                <span style="padding:0 8px">{{ entry.qty }}</span>
+                                <button @click="changeQty(entry.course.id, 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- checkout form -->
+                <div class="cart-checkout">
+                    <div style="margin-bottom:12px">
+                        <label style="display:block;font-weight:600;margin-bottom:6px">Name</label>
+                        <input type="text" v-model="checkoutName" placeholder="Full name" />
+                    </div>
+                    <div style="margin-bottom:12px">
+                        <label style="display:block;font-weight:600;margin-bottom:6px">Phone</label>
+                        <input type="tel" v-model="checkoutPhone" placeholder="Phone number" />
+                    </div>
+                    <div class="cart-footer">
+                        <div>Total: ${{ cartTotal.toFixed(2) }}</div>
+                        <button @click="checkout" :disabled="!canCheckout">Checkout</button>
+                    </div>
+                </div>
+                <button class="close-cart" @click="cartOpen=false" aria-label="Close cart">×</button>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Vue 2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
+    <script src="app-vue.js"></script>
+</body>
+
+</html>
