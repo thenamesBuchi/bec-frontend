@@ -99,6 +99,15 @@ new Vue({
             // enable/disable header cart button when cart is empty
             const cartBtn = document.getElementById('cart-btn');
             if (cartBtn) cartBtn.disabled = n === 0;
+            // save cart to localStorage whenever count changes
+            saveCartToStorage(this.cartMap);
+        },
+        courses: {
+            handler(newCourses) {
+                // save courses (with updated spaces) to localStorage
+                saveCoursesToStorage(newCourses);
+            },
+            deep: true
         }
     },
     methods: {
@@ -143,6 +152,16 @@ new Vue({
         }
     },
     mounted() {
+        // load cart and courses from localStorage
+        const savedCart = loadCartFromStorage();
+        if (Object.keys(savedCart).length > 0) {
+            this.cartMap = savedCart;
+        }
+        const savedCourses = loadCoursesFromStorage();
+        if (savedCourses) {
+            this.courses = savedCourses;
+        }
+
         // wire up header search input to filters.query
         const search = document.getElementById('search');
         if (search) {
