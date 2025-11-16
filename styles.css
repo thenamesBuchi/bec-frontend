@@ -177,7 +177,34 @@ header nav {
 
 .add-btn {
     background: var(--accent);
-    color: #fff
+    color: #fff;
+    transition: all 0.2s ease
+}
+
+.add-btn:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: scale(1.02)
+}
+
+.add-btn:disabled {
+    background: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6
+}
+
+button:disabled {
+    background: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6
+}
+
+#cart-btn:disabled {
+    background: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6
 }
 
 .price {
