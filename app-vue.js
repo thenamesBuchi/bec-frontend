@@ -1,4 +1,33 @@
-// Vue 2 application
+// ===== localStorage utilities =====
+const STORAGE_KEYS = {
+    CART: 'bec_cart',
+    COURSES: 'bec_courses'
+};
+
+function saveCartToStorage(cartMap) {
+    localStorage.setItem(STORAGE_KEYS.CART, JSON.stringify(cartMap));
+}
+
+function loadCartFromStorage() {
+    const stored = localStorage.getItem(STORAGE_KEYS.CART);
+    return stored ? JSON.parse(stored) : {};
+}
+
+function saveCoursesToStorage(courses) {
+    localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(courses));
+}
+
+function loadCoursesFromStorage() {
+    const stored = localStorage.getItem(STORAGE_KEYS.COURSES);
+    return stored ? JSON.parse(stored) : null;
+}
+
+function clearStorage() {
+    localStorage.removeItem(STORAGE_KEYS.CART);
+    localStorage.removeItem(STORAGE_KEYS.COURSES);
+}
+
+// ===== Vue 2 application =====
 new Vue({
     el: '#app',
     data() {
