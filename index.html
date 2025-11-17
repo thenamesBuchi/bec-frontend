@@ -73,16 +73,21 @@
                 <h3>Your Cart</h3>
                 <div id="cart-items">
                     <div class="cart-item" v-for="(entry, id) in cartEntries" :key="id">
-                        <div>
-                            <div style="font-weight:600">{{ entry.course.title }}</div>
-                            <div style="font-size:.9rem;color:#6b7280">{{ entry.course.instructor }}</div>
+                        <div class="cart-item-left">
+                            <div class="cart-item-media">{{ entry.course.title.split(' ')[0] }}</div>
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">{{ entry.course.title }}</div>
+                                <div class="cart-item-author">{{ entry.course.instructor }}</div>
+                                <div class="cart-item-meta">{{ entry.course.location }} • {{ entry.course.topic }}</div>
+                            </div>
                         </div>
-                        <div style="text-align:right">
-                            <div>${{ entry.course.price.toFixed(2) }}</div>
-                            <div style="font-size:.9rem;margin-top:6px">
-                                <button @click="changeQty(entry.course.id, -1)">-</button>
-                                <span style="padding:0 8px">{{ entry.qty }}</span>
-                                <button @click="changeQty(entry.course.id, 1)">+</button>
+                        <div class="cart-item-right">
+                            <div class="cart-item-price">${{ entry.course.price.toFixed(2) }}</div>
+                            <div class="cart-item-qty">
+                                <button @click="changeQty(entry.course.id, -1)" :disabled="entry.qty<=0">-</button>
+                                <span class="qty-count">{{ entry.qty }}</span>
+                                <button @click="changeQty(entry.course.id, 1)"
+                                    :disabled="entry.course.spaces<=0">+</button>
                             </div>
                         </div>
                     </div>
