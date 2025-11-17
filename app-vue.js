@@ -27,6 +27,17 @@ function clearStorage() {
     localStorage.removeItem(STORAGE_KEYS.COURSES);
 }
 
+// Create a simple SVG data-URL placeholder (no external request)
+function svgDataUrl(text = 'Course', w = 300, h = 200, bg = '#e9f2ff', fg = '#0066ff') {
+    const safeText = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const svg = `
+        <svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}'>
+            <rect width='100%' height='100%' fill='${bg}' />
+            <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, Arial, Helvetica, sans-serif' font-size='24' fill='${fg}'>${safeText}</text>
+        </svg>`;
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
 // ===== Vue 2 application =====
 new Vue({
     el: '#app',
@@ -113,12 +124,13 @@ new Vue({
     methods: {
         onImageError(e) {
             try {
-                const alt = e.target.alt || 'course';
-                // fallback to a reliable placeholder with the course keyword
-                const tag = encodeURIComponent(alt.split(' ')[0]);
-                e.target.src = `https://via.placeholder.com/300x200?text=${tag}`;
+                const alt = e.target.alt || 'Course';
+                const tag = (alt.split(' ')[0] || 'Course');
+                e.target.onerror = null; // avoid potential infinite loop
+                e.target.src = svgDataUrl(tag, 300, 200);
             } catch (err) {
-                e.target.src = 'https://via.placeholder.com/300x200?text=Course';
+                e.target.onerror = null;
+                e.target.src = svgDataUrl('Course', 300, 200);
             }
         },
         addToCart(course) {
