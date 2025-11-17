@@ -94,13 +94,20 @@
                 </div>
                 <!-- checkout form -->
                 <div class="cart-checkout">
-                    <div style="margin-bottom:12px">
+                    <div style="margin-bottom:16px">
                         <label style="display:block;font-weight:600;margin-bottom:6px">Name</label>
-                        <input type="text" v-model="checkoutName" placeholder="Full name" />
+                        <input type="text" v-model="checkoutName" placeholder="Full name"
+                            :class="{'input-valid': checkoutName && validName, 'input-invalid': checkoutName && !validName}" />
+                        <div v-if="checkoutName && !validName" class="form-error">Name must contain letters only</div>
+                        <div v-if="checkoutName && validName" class="form-success">✓ Valid name</div>
                     </div>
-                    <div style="margin-bottom:12px">
+                    <div style="margin-bottom:16px">
                         <label style="display:block;font-weight:600;margin-bottom:6px">Phone</label>
-                        <input type="tel" v-model="checkoutPhone" placeholder="Phone number" />
+                        <input type="tel" v-model="checkoutPhone" placeholder="Phone number"
+                            :class="{'input-valid': checkoutPhone && validPhone, 'input-invalid': checkoutPhone && !validPhone}" />
+                        <div v-if="checkoutPhone && !validPhone" class="form-error">Phone must contain numbers only
+                        </div>
+                        <div v-if="checkoutPhone && validPhone" class="form-success">✓ Valid phone</div>
                     </div>
                     <div class="cart-footer">
                         <div>Total: ${{ cartTotal.toFixed(2) }}</div>

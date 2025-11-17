@@ -249,6 +249,31 @@ button:disabled {
     margin-top: 6px;
 }
 
+/* Validation feedback */
+.input-valid {
+    border-color: #10b981 !important;
+    box-shadow: 0 6px 18px rgba(16,185,129,0.08) !important;
+}
+
+.input-invalid {
+    border-color: #ef4444 !important;
+    box-shadow: 0 6px 18px rgba(239,68,68,0.08) !important;
+}
+
+.form-error {
+    font-size: .85rem;
+    color: #ef4444;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+.form-success {
+    font-size: .85rem;
+    color: #10b981;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
 .cart {
     /* full-page sliding cart panel */
     position: fixed;
