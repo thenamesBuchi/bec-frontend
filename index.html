@@ -52,7 +52,10 @@
 
             <section class="courses-grid" aria-live="polite">
                 <article class="course-card" v-for="course in filteredCourses" :key="course.id">
-                    <div class="course-media">{{ course.title.split(' ')[0] }}</div>
+                    <div class="course-media">
+                        <img :src="course.imageUrl" :alt="course.title" class="course-image" loading="lazy"
+                            @error="onImageError" />
+                    </div>
                     <div class="course-body">
                         <div class="course-title">{{ course.title }}</div>
                         <div class="course-meta">{{ course.instructor }} • {{ course.location }} • ⭐ {{ course.rating }}
