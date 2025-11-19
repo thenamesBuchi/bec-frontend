@@ -69,6 +69,10 @@ new Vue({
             checkoutPhone: ''
         }
     },
+    // base API for backend integration (change if deployed elsewhere)
+    created() {
+        this.API_BASE = 'http://localhost:5000/api';
+    },
     computed: {
         filteredCourses() {
             const q = this.filters.query && this.filters.query.toLowerCase();
@@ -122,6 +126,22 @@ new Vue({
         }
     },
     methods: {
+        // Fetch courses from backend API and merge with local storage fallback
+        async loadCoursesFromApi() {
+            try {
+                const res = await fetch(`${this.API_BASE}/courses`);
+                if (!res.ok) throw new Error('Failed to fetch courses');
+                const data = await res.json();
+                // normalize: ensure `id` field exists for UI code
+                this.courses = data.map(c => ({ ...c, id: c._id || c.id }));
+                // save to local storage so UI persists if backend offline
+                saveCoursesToStorage(this.courses);
+            } catch (err) {
+                // keep existing local courses as fallback
+                console.warn('Could not load courses from API, using local data:', err.message);
+            }
+        },
+
         onImageError(e) {
             try {
                 const alt = e.target.alt || 'Course';
@@ -164,13 +184,58 @@ new Vue({
                 return;
             }
             const total = this.cartTotal.toFixed(2);
-            // For prototype: show confirmation and clear cart (spaces already reduced when added)
-            alert(`Order submitted. Thank you ${this.checkoutName.trim()}! Total: $${total}`);
-            // clear cart
+            // Attempt to POST order to backend
+            const items = this.cartEntries.map(e => ({
+                courseId: e.course._id || e.course.id,
+                title: e.course.title,
+                price: e.course.price,
+                quantity: e.qty
+            }));
+
+            const payload = {
+                customerName: this.checkoutName.trim(),
+                customerPhone: this.checkoutPhone.trim(),
+                customerEmail: '',
+                items,
+                totalPrice: Number(total)
+            };
+
+            fetch(`${this.API_BASE}/orders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(r => r.json())
+                .then(resp => {
+                    if (resp && resp._id) {
+                        // success: clear cart and refresh courses from API to get authoritative spaces
+                        alert(`Order submitted. Thank you ${this.checkoutName.trim()}! Total: $${total}`);
+                        this.cartMap = {};
+                        this.checkoutName = '';
+                        this.checkoutPhone = '';
+                        this.cartOpen = false;
+                        this.loadCoursesFromApi();
+                    } else if (resp && resp.error) {
+                        alert('Order failed: ' + resp.error);
+                    } else {
+                        alert('Unexpected response from server');
+                    }
+                })
+                .catch(err => {
+                    console.error('Checkout error', err);
+                    alert('Could not submit order. Please try again later.');
+                });
+        }
+        ,
+        // Clear cart and restore local spaces
+        clearCart() {
+            for (let id in this.cartMap) {
+                const entry = this.cartMap[id];
+                if (entry && entry.course) {
+                    entry.course.spaces += entry.qty;
+                }
+            }
             this.cartMap = {};
-            this.checkoutName = '';
-            this.checkoutPhone = '';
-            this.cartOpen = false;
         }
     },
     mounted() {
@@ -183,6 +248,9 @@ new Vue({
         if (savedCourses) {
             this.courses = savedCourses;
         }
+
+        // try to load fresh courses from backend
+        this.loadCoursesFromApi();
 
         // wire up header search input to filters.query
         const search = document.getElementById('search');

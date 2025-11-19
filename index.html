@@ -114,7 +114,10 @@
                     </div>
                     <div class="cart-footer">
                         <div>Total: ${{ cartTotal.toFixed(2) }}</div>
-                        <button @click="checkout" :disabled="!canCheckout">Checkout</button>
+                        <div>
+                            <button @click="clearCart" style="margin-right:8px">Clear</button>
+                            <button @click="checkout" :disabled="!canCheckout">Checkout</button>
+                        </div>
                     </div>
                 </div>
                 <button class="close-cart" @click="cartOpen=false" aria-label="Close cart">×</button>
