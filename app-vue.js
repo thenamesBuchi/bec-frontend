@@ -44,18 +44,7 @@ new Vue({
     data() {
         return {
             // expanded course list to meet module requirement (>=10 lessons)
-            courses: [
-                { id: 'c1', title: 'Python for Beginners', topic: 'Python', location: 'Hendon', category: 'programming', price: 24.99, instructor: 'A. Smith', rating: 4.7, spaces: 5, imageUrl: 'https://source.unsplash.com/featured/300x200?python,programming&sig=c1' },
-                { id: 'c2', title: 'Web Development Bootcamp', topic: 'Web', location: 'Colindale', category: 'programming', price: 39.99, instructor: 'B. Lee', rating: 4.8, spaces: 6, imageUrl: 'https://source.unsplash.com/featured/300x200?web,development&sig=c2' },
-                { id: 'c3', title: 'Data Science with Python', topic: 'Data', location: 'Brent Cross', category: 'data', price: 49.99, instructor: 'C. Zhao', rating: 4.9, spaces: 4, imageUrl: 'https://source.unsplash.com/featured/300x200?data,science&sig=c3' },
-                { id: 'c4', title: 'UI/UX Design Fundamentals', topic: 'Design', location: 'Golders Green', category: 'design', price: 19.99, instructor: 'D. Kumar', rating: 4.5, spaces: 7, imageUrl: 'https://source.unsplash.com/featured/300x200?ui,ux,design&sig=c4' },
-                { id: 'c5', title: 'Intro to Machine Learning', topic: 'ML', location: 'Hendon', category: 'data', price: 59.99, instructor: 'E. Gomez', rating: 4.8, spaces: 3, imageUrl: 'https://source.unsplash.com/featured/300x200?machine,learning&sig=c5' },
-                { id: 'c6', title: 'Business Analytics', topic: 'Business', location: 'Colindale', category: 'business', price: 29.99, instructor: 'F. Rossi', rating: 4.6, spaces: 8, imageUrl: 'https://source.unsplash.com/featured/300x200?business,analytics&sig=c6' },
-                { id: 'c7', title: 'Advanced JavaScript', topic: 'JavaScript', location: 'Brent Cross', category: 'programming', price: 34.99, instructor: 'G. Patel', rating: 4.6, spaces: 5, imageUrl: 'https://source.unsplash.com/featured/300x200?javascript,code&sig=c7' },
-                { id: 'c8', title: 'Databases with MongoDB', topic: 'Databases', location: 'Golders Green', category: 'data', price: 44.99, instructor: 'H. Wang', rating: 4.7, spaces: 6, imageUrl: 'https://source.unsplash.com/featured/300x200?database,mongodb&sig=c8' },
-                { id: 'c9', title: 'Responsive Web Design', topic: 'Design', location: 'Hendon', category: 'design', price: 22.99, instructor: 'I. Murphy', rating: 4.5, spaces: 9, imageUrl: 'https://source.unsplash.com/featured/300x200?responsive,design&sig=c9' },
-                { id: 'c10', title: 'DevOps Essentials', topic: 'DevOps', location: 'Colindale', category: 'business', price: 49.99, instructor: 'J. Nasser', rating: 4.4, spaces: 4, imageUrl: 'https://source.unsplash.com/featured/300x200?devops,infrastructure&sig=c10' }
-            ],
+            
             filters: {
                 query: '',
                 category: 'all',
@@ -117,13 +106,13 @@ new Vue({
             // save cart to localStorage whenever count changes
             saveCartToStorage(this.cartMap);
         },
-        courses: {
-            handler(newCourses) {
-                // save courses (with updated spaces) to localStorage
-                saveCoursesToStorage(newCourses);
-            },
-            deep: true
-        }
+        // courses: {
+        //     handler(newCourses) {
+        //         // save courses (with updated spaces) to localStorage
+        //         saveCoursesToStorage(newCourses);
+        //     },
+        //     deep: true
+        // }
     },
     methods: {
         // Fetch courses from backend API and merge with local storage fallback
