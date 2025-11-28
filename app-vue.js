@@ -193,7 +193,7 @@ new Vue({
                 totalPrice: Number(total)
             };
 
-            fetch(`${this.API_BASE}/orders`, {
+            fetch(`${this.API_BASE}/api/orders`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
