@@ -119,7 +119,7 @@ new Vue({
         // Fetch courses from backend API and merge with local storage fallback
         async loadCoursesFromApi() {
             try {
-                const res = await fetch(`${this.API_BASE}/courses`);
+                const res = await fetch(`${this.API_BASE}/api/courses`);
                 if (!res.ok) throw new Error('API error');
                 const data = await res.json();
                 // normalize: ensure `id` field exists for UI code
