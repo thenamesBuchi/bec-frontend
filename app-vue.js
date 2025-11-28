@@ -60,10 +60,11 @@ new Vue({
     },
     // base API for backend integration (change if deployed elsewhere)
     created() {
-        this.API_BASE = 'http://localhost:5000/api';
+        this.API_BASE = 'https://bec-backend.onrender.com';
     },
     computed: {
         filteredCourses() {
+            if (!Array.isArray(this.courses)) return [];
             const q = this.filters.query && this.filters.query.toLowerCase();
             let list = this.courses.filter(c => {
                 const matchesQ = !q || c.title.toLowerCase().includes(q) || c.instructor.toLowerCase().includes(q);
@@ -119,15 +120,18 @@ new Vue({
         async loadCoursesFromApi() {
             try {
                 const res = await fetch(`${this.API_BASE}/courses`);
-                if (!res.ok) throw new Error('Failed to fetch courses');
+                if (!res.ok) throw new Error('API error');
                 const data = await res.json();
                 // normalize: ensure `id` field exists for UI code
                 this.courses = data.map(c => ({ ...c, id: c._id || c.id }));
                 // save to local storage so UI persists if backend offline
                 saveCoursesToStorage(this.courses);
             } catch (err) {
-                // keep existing local courses as fallback
-                console.warn('Could not load courses from API, using local data:', err.message);
+                console.error('Could not load courses from API, using local data:', err);
+                const localCourses = loadCoursesFromStorage();
+                if (localCourses) {
+                    this.courses = localCourses;
+                }
             }
         },
 
