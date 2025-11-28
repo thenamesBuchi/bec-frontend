@@ -43,7 +43,7 @@ new Vue({
     el: '#app',
     data() {
         return {
-            // expanded course list to meet module requirement (>=10 lessons)
+            courses: [], // all courses from backend
             
             filters: {
                 query: '',
