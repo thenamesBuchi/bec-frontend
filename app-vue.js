@@ -179,7 +179,7 @@ new Vue({
             const total = this.cartTotal.toFixed(2);
             // Attempt to POST order to backend
             const items = this.cartEntries.map(e => ({
-                courseId: e.course._id || e.course.id,
+                courseId: e.course._id,
                 title: e.course.title,
                 price: e.course.price,
                 quantity: e.qty
